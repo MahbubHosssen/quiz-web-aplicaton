@@ -3,7 +3,7 @@ const questions = [
         question : "Which is largest animal in the world?",
         answer: [
             {text: "SharedWorker", correct: false},
-            {text: "Bluewhale", correct: true},
+            {text: "BlueWhale", correct: true},
             {text: "Elephant", correct: false},
             {text: "Tiger", correct: false}
         ]
@@ -36,31 +36,61 @@ const questions = [
         ]
     }
 ]
-let count = 0;
+
+const buttonsContainer = document.querySelector(".buttons")
+const questionElement = document.querySelector(".question")
+
+let currentQuestion = 0;
 let currentQuestionIndex = 0;
 
-const questionElement = document.querySelector(".question");
-const buttonsContainer = document.querySelector(".buttons");
-
-function currentQuestion(){
+function startQuiz(){
     resetState()
-    count++;
-    
     let currentQuestion = questions[currentQuestionIndex]
     let currentQuestionNumber = currentQuestionIndex + 1;
-    questionElement.innerText = currentQuestionNumber + "." + currentQuestion.question;
+    questionElement.innerHTML = `${currentQuestionNumber}. ${currentQuestion.question}`;
 
-    for(const answer of currentQuestion.answer){
-        const button = document.createElement("button")
-        button.innerText = answer.text;
-        buttonsContainer.appendChild(button)
-        console.log(count)
-    }
+    questions[currentQuestionIndex].answer.forEach(button => {
+        const buttonElement = document.createElement("button")
+        buttonElement.classList = "button"
+        buttonElement.innerText = button.text;
+        console.log(button)
+        buttonsContainer.appendChild(buttonElement)
+
+        if(button.correct === true){
+            buttonElement.setAttribute("data-set", "true")
+        }
+        buttonElement.addEventListener("click", selectButton)
+    });
 }
+const selectButton = (e) => {
+    const selectBtnElement = e.target
+    if(selectBtnElement.getAttribute("data-set")){
+        selectBtnElement.classList.add("correct")
+    }else{
+        selectBtnElement.classList.add("incorrect")
+    }
+
+    console.log(buttonsContainer.children)
+    // buttonsContainer.children.for(btn => {
+    //     console.log(btn)
+    // })
+    Array.from(buttonsContainer.children).forEach(btn => {
+        if(btn.getAttribute("data-set")){
+            btn.classList.add("correct")
+        }
+        btn.disabled = true;
+    })
+
+}
+
+
+
 function resetState(){
-    while(buttonsContainer.firstChild){
-        buttonsContainer.removeChild(buttonsContainer.firstChild)
+    if(buttonsContainer.children){
+        buttonsContainer.innerHTML = "";
     }
 }
 
-currentQuestion()
+
+
+startQuiz()

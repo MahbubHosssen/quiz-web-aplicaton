@@ -26,7 +26,7 @@
 .question-ans h2{
     padding: 1rem 0;
 }
-.buttons button{
+.buttons .button{
     display: block;
     width: 100%;
     text-align: left;
@@ -37,12 +37,19 @@
     border-radius: 0.5rem;
     font-weight: 500;
     cursor: pointer;
+    color: black;
+    transition: 0.5s;
 }
-.buttons button:hover{
+
+.button:hover:not([disabled]){
     background-color: #222;
     transition: 0.2s ease;
     color: white;
 }
+.button:disabled{
+    cursor: no-drop;
+}
+
 #next-btn{
     background-color:#001e4d;
     padding: 0.8rem 3rem;
@@ -53,4 +60,12 @@
     border-radius: 0.3rem;
     cursor: pointer;
     font-size: 1.1rem;
+}
+
+.correct{
+    background-color: #9aeabc;
+
+}
+.incorrect{
+    background-color: #ff9393;
 }
