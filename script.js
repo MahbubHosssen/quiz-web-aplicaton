@@ -2,7 +2,7 @@ const questions = [
     {
         question : "Which is largest animal in the world?",
         answer: [
-            {text: "SharedWorker", correct: false},
+            {text: "Shark", correct: false},
             {text: "BlueWhale", correct: true},
             {text: "Elephant", correct: false},
             {text: "Tiger", correct: false}
@@ -39,12 +39,24 @@ const questions = [
 
 const buttonsContainer = document.querySelector(".buttons")
 const questionElement = document.querySelector(".question")
+const nextBtn = document.querySelector("#next-btn")
 
 let currentQuestion = 0;
 let currentQuestionIndex = 0;
+let score = 0;
 
 function startQuiz(){
+    currentQuestion = 0;
+    currentQuestionIndex = 0;
+    score = 0;
+    nextBtn.innerText = "Next"
+    nextBtn.style.display = "none"
+    showQuiz()
+}
+
+function showQuiz(){
     resetState()
+    nextBtn.style.display = "none"
     let currentQuestion = questions[currentQuestionIndex]
     let currentQuestionNumber = currentQuestionIndex + 1;
     questionElement.innerHTML = `${currentQuestionNumber}. ${currentQuestion.question}`;
@@ -56,9 +68,10 @@ function startQuiz(){
         console.log(button)
         buttonsContainer.appendChild(buttonElement)
 
-        if(button.correct === true){
+        if(button.correct){
             buttonElement.setAttribute("data-set", "true")
         }
+
         buttonElement.addEventListener("click", selectButton)
     });
 }
@@ -66,6 +79,7 @@ const selectButton = (e) => {
     const selectBtnElement = e.target
     if(selectBtnElement.getAttribute("data-set")){
         selectBtnElement.classList.add("correct")
+        score++;
     }else{
         selectBtnElement.classList.add("incorrect")
     }
@@ -78,12 +92,34 @@ const selectButton = (e) => {
         if(btn.getAttribute("data-set")){
             btn.classList.add("correct")
         }
-        btn.disabled = true;
+        btn.setAttribute("disabled", true);
     })
-
+    nextBtn.style.display = "block";
+    
 }
 
+function showScore(){
+    resetState()
+    questionElement.innerText = `You Score ${score} out of 4`
+    nextBtn.innerText = "Play Again"
+}
 
+function handleNextBtn(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        showQuiz()
+    }else{
+        showScore()
+    }
+}
+
+nextBtn.addEventListener("click", function(){
+    if(currentQuestionIndex < questions.length){
+        handleNextBtn()
+    }else{
+        startQuiz()
+    }
+})
 
 function resetState(){
     if(buttonsContainer.children){
